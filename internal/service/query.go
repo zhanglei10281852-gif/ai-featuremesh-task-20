@@ -86,8 +86,7 @@ func (s *QueryService) DriftIncidents(ctx context.Context, filter repository.Dri
 
 func (s *QueryService) Audit(ctx context.Context, filter repository.AuditFilter) (repository.AuditPage, error) {
 	principal, _ := principalOrEmpty(ctx)
-	action := domain.AuditReadAction()
-	if err := requireAction(principal, action); err != nil {
+	if err := requireRole(principal, domain.RoleComplianceAuditor, domain.RoleMLEngineer); err != nil {
 		return repository.AuditPage{}, err
 	}
 	var page repository.AuditPage
